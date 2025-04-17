@@ -11,6 +11,7 @@ from linkedin_jobs_scraper.filters import RelevanceFilters, TimeFilters, TypeFil
 
 from threading import Event
 import pandas as pd
+from selenium.webdriver.chrome.options import Options  # Import Options
 
 # Streamlit App Title
 st.title("🔍 LinkedIn Job Scraper")
@@ -34,15 +35,14 @@ else:
     if not os.access(chrome_driver_path, os.X_OK):
         os.chmod(chrome_driver_path, os.stat(chrome_driver_path).st_mode | stat.S_IEXEC)
     
-    # Set Chrome options for headless execution
-    chrome_options = [
-        "--headless",
-        "--no-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-gpu",
-        "--window-size=1920x1080",
-        "--remote-debugging-port=9222"
-    ]
+    # Create Chrome options instance
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--window-size=1920x1080")
+    chrome_options.add_argument("--remote-debugging-port=9222")
 
 # For collecting data
 job_results = []
@@ -87,7 +87,7 @@ if start_scraping:
         scraper = LinkedinScraper(
             chrome_executable_path=chrome_driver_path,
             chrome_binary_location=None,
-            chrome_options=chrome_options,
+            chrome_options=chrome_options,  # Pass Options object here
             headless=True,
             max_workers=1,
             slow_mo=0.5,
