@@ -24,6 +24,7 @@ start_scraping = st.button("Start Scraping")
 # Configure logging
 logging.basicConfig(level=logging.WARNING)
 
+# Setup chrome driver path for Linux and Windows
 if sys.platform.startswith("win"):
     chrome_driver_path = os.path.join(os.getcwd(), "chromedriver.exe")
     chrome_options = None
@@ -32,8 +33,16 @@ else:
     # Ensure the Linux driver is executable
     if not os.access(chrome_driver_path, os.X_OK):
         os.chmod(chrome_driver_path, os.stat(chrome_driver_path).st_mode | stat.S_IEXEC)
-    chrome_options = ["--headless", "--no-sandbox", "--disable-dev-shm-usage"]
-
+    
+    # Set Chrome options for headless execution
+    chrome_options = [
+        "--headless",
+        "--no-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-gpu",
+        "--window-size=1920x1080",
+        "--remote-debugging-port=9222"
+    ]
 
 # For collecting data
 job_results = []
@@ -78,7 +87,7 @@ if start_scraping:
         scraper = LinkedinScraper(
             chrome_executable_path=chrome_driver_path,
             chrome_binary_location=None,
-            chrome_options=None,
+            chrome_options=chrome_options,
             headless=True,
             max_workers=1,
             slow_mo=0.5,
