@@ -85,9 +85,9 @@ if start_scraping:
             job_count = 10  # Default to 10 if invalid value is entered
 
         scraper = LinkedinScraper(
-            chrome_executable_path=chrome_driver_path,
+            chrome_executable_path=None,
             chrome_binary_location=None,
-            chrome_options=chrome_options,  # Pass Options object here
+            chrome_options=None,  # Pass Options object here
             headless=True,
             max_workers=1,
             slow_mo=0.5,
