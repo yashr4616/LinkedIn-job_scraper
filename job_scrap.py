@@ -1,6 +1,7 @@
 import streamlit as st
 import sys
 import os
+import stat
 import logging
 from linkedin_jobs_scraper import LinkedinScraper
 from linkedin_jobs_scraper.events import Events, EventData, EventMetrics
